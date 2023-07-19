@@ -1,10 +1,10 @@
 import Part from './Part';
 
-const Content = (props) => {
-    // console.log(props)
+const Content = ({arr}) => {
+    console.log(arr)
     return (
         <div>
-            <Part  part = {props} exercises = {props}/>   
+            <Part  part = {arr} />   
         </div>
     )
 }

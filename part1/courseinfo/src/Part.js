@@ -1,13 +1,9 @@
-const Part = (part) => {
-    console.log(part, 'hello');
+const Part = (props) => {
+    // console.log(parts, 'hello');
     return (
-        <div>
-            {part.part.map((data, i) => 
-                <p key = {i}>
-                    {data.part} {data.exercise} 
-                </p>
-            )}
-        </div>
+        <p>
+            {props.part.name} {props.part.exercises}
+        </p>
     )
 }   
 export default Part;

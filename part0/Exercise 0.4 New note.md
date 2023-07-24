@@ -1,23 +1,31 @@
 ```mermaid
 sequenceDiagram
-    actor User
-    
-    User->>Browser: Clicks submit button
-    Browser->>Server: Send user input to server
-    Note right of Browser: POST request
-    Note left of Server: Add input to notes
-    Server->>Browser: Send response to browser
-    Note left of Server: 382 status code response
-    Note right of Browser: Reload
-    Browser->>Server: Fetch main.css
-    Note right of Browser: GET request
-    Server->>Browser: Provide main.css
-    Browser->>Server: Fetch main.css
-    Note right of Browser: GET request
-    Server->>Browser: Provide main.js
-    Browser->>Server: Fetch data.json
-    Note right of Browser: GET request
-    Server->>Browser: Provide updated data.json
-    Browser->>User: Render page
+    participant browser
+    participant server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server-->>browser: the css file
+    deactivate server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate server
+    server-->>browser: the JavaScript file
+    deactivate server
+
+    Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
+
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server
+    server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
+    deactivate server
+
+    Note right of browser: The browser executes the callback function that renders the notescopy
+
 
 ```

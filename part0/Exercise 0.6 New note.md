@@ -1,6 +1,6 @@
 Question Statement
 
-Sequence diagram It depicts the situation where user visits the page: https://studies.cs.helsinki.fi/exampleapp/notes
+Sequence diagram depicts the situation where user visits the page: https://studies.cs.helsinki.fi/exampleapp/notes
 
 ```mermaid
 sequenceDiagram

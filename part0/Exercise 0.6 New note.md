@@ -1,6 +1,6 @@
 <h1>0.6: New note in Single page app diagram</h1>
 
-Sequence diagram depicts the situation where user visits the page: https://studies.cs.helsinki.fi/exampleapp/notes
+Sequence diagram depicting the situation where the user creates a new note using the single-page version of the app.
 
 ```mermaid
 sequenceDiagram

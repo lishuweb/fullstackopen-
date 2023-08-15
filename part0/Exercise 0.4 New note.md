@@ -1,6 +1,6 @@
 <h1>0.4: New note diagram</h1>
 
-The chain of events caused by opening the page https://studies.cs.helsinki.fi/exampleapp/notes is depicted as a sequence diagram
+The chain of events caused by opening the page https://studies.cs.helsinki.fi/exampleapp/notes is depicted as a sequence diagram.
 
 ```mermaid
 sequenceDiagram
@@ -32,7 +32,7 @@ sequenceDiagram
     Note right of browser: The browser executes the callback function that renders the notescopy
 ```
 
-Solution - Sequence diagram depicting the situation where the user creates a new note on the page https://studies.cs.helsinki.fi/exampleapp/notes by writing something into the text field and clicking the submit button.
+Solution - Sequence diagram depicting the situation where the user creates a new note on the page https://studies.cs.helsinki.fi/exampleappnotes by writing something into the text field and clicking the submit button.
 
 ```mermaid
 sequenceDiagram

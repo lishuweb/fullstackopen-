@@ -1,22 +1,27 @@
-import { useState } from "react";
-import Person from "./components/Person";
+import { useState, useEffect } from "react";
+import FilterPerson from "./components/FilterPerson";
 import PersonForm from "./components/PersonForm";
+import Filter from "./components/Filter";
+import axios from "axios";
 
 const App = () => {
-  const arr = [
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ];
-
-  const [persons, setPersons] = useState(arr);
+  
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  // const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    let myAxiosData = axios.get("http://localhost:3001/arr")
+    myAxiosData.then((result) => {
+      console.log(result);
+      setPersons(result.data);
+      console.log(result.data, "hello");
+    })
+  }, []);
 
   const handleDisplay = (event) => {
-    event.preventDefault();
+    event.preventDefault();    
 
     let val = persons.find((value) => value.name === newName && value.number === newNumber)
       console.log(val);
@@ -47,16 +52,14 @@ const App = () => {
       setNewNumber(event.target.value);
     }
 
-    
   return (
    
     <div>
 
       <h1>Phonebook</h1>
 
-      {/* <Filter filters = {filter}
-              handleName = {handleName(setFilter)}
-               /> */}
+      <Filter filter = {filter} 
+              handleName = {handleName(setFilter)}/>
 
       <h1>add a new</h1>
 
@@ -69,7 +72,8 @@ const App = () => {
 
       <h1>Numbers</h1>
       
-      <Person person = {persons} />
+      <FilterPerson person = {persons} 
+              filters = {filter}/>
 
     </div>
   )

@@ -1,4 +1,4 @@
-0.6: New note in Single page app diagram
+<h1>0.6: New note in Single page app diagram</h1>
 
 Sequence diagram depicts the situation where user visits the page: https://studies.cs.helsinki.fi/exampleapp/notes
 

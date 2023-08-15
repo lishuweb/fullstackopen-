@@ -1,4 +1,4 @@
-0.4: New note diagram
+<h1>0.4: New note diagram</h1>
 
 The chain of events caused by opening the page https://studies.cs.helsinki.fi/exampleapp/notes is depicted as a sequence diagram
 
@@ -40,9 +40,8 @@ sequenceDiagram
     participant server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-    server: redirects to:
-https://studies.cs.helsinki.fi/exampleapp/notes
-    activate server
+    activate server 
+    Note left of server : redirects to: https://studies.cs.helsinki.fi/exampleapp/notes
     server-->>browser: HTML document
     deactivate server
 

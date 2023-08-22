@@ -1,80 +1,112 @@
-import { useState, useEffect } from "react";
-import FilterPerson from "./components/FilterPerson";
-import PersonForm from "./components/PersonForm";
-import Filter from "./components/Filter";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
+import Notification from './components/Notification';
+import personService from './services/personService';
 
 const App = () => {
-  
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [filter, setFilter] = useState("");
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [filterQuery, setFilterQuery] = useState('');
+  const [status, setStatus] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    let myAxiosData = axios.get("http://localhost:3001/arr")
-    myAxiosData.then((result) => {
-      console.log(result);
-      setPersons(result.data);
-      console.log(result.data, "hello");
-    })
+    personService.getAll().then(initialPersons => setPersons(initialPersons))
   }, []);
 
-  const handleDisplay = (event) => {
-    event.preventDefault();    
+  const handleChange = setValue => e => setValue(e.target.value);
 
-    let val = persons.find((value) => value.name === newName && value.number === newNumber)
-      console.log(val);
-      if(val)
-      {
-        alert(`${newName} ${newNumber} is already added to phonebook`);
-      }
-      else 
-      {
-        setPersons(
-              persons.concat({
-                name: newName,
-                number: newNumber,
-                id: persons.length + 1
-              })
+  const handleAddNewPerson = e => {
+    e.preventDefault();
+
+    const newPerson = { name: newName, number: newNumber };
+    const foundPerson = persons.find(person => person.name === newName);
+
+    if (foundPerson) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personService
+          .update(foundPerson.id, newPerson)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.id !== foundPerson.id ? person : returnedPerson
+              )
             )
+          })
+          .catch(error => {
+            setStatus('error');
+            setMessage(`Information of ${foundPerson.name} has already been removed from server`);
+            setTimeout(() => {
+              setStatus(null);
+              setMessage(null);
+            }, 5000);
+
+            setPersons(persons.filter(person => person.id !== foundPerson.id))
+          })
       }
-    setNewName("");
-    setNewNumber("");
+    } else {
+      personService.create(newPerson).then(addedPerson => {
+        setPersons(persons.concat(addedPerson));
+        setStatus('success');
+        setMessage(`Added ${addedPerson.name}`);
+        setTimeout(() => {
+          setStatus(null);
+          setMessage(null);
+        }, 5000);
+
+        setNewName('');
+        setNewNumber('');
+      })
+    }
   }
 
-    const handleName = (event) => {
-      console.log(event.target.value);
-      setNewName(event.target.value);
+  const handleRemovePerson = (id, name) => () => {
+    if (window.confirm(`Delete ${name}?`)) 
+    {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter(person => person.name !== name))
+      })
     }
-
-    const handleNumber = (event) => {
-      setNewNumber(event.target.value);
-    }
+  }
 
   return (
-   
     <div>
-
       <h1>Phonebook</h1>
 
-      <Filter filter = {filter} 
-              handleName = {handleName(setFilter)}/>
-
-      <h1>add a new</h1>
-
-      <PersonForm newName = {newName} 
-                  newNumber = {newNumber}
-                  handleDisplay = {handleDisplay}
-                  handleName = {handleName}
-                  handleNumber = {handleNumber}
+      <Notification 
+        message={message} 
+        status={status} 
       />
 
-      <h1>Numbers</h1>
-      
-      <FilterPerson person = {persons} 
-              filters = {filter}/>
+      <Filter 
+        query={filterQuery} 
+        handleChange={handleChange(setFilterQuery)} 
+      />
 
+      <h2>add a new</h2>
+
+      <PersonForm
+        name={newName}
+        number={newNumber}
+        handleChangeName={handleChange(setNewName)}
+        handleChangeNumber={handleChange(setNewNumber)}
+        handleAddPerson={handleAddNewPerson}
+      />
+
+      <h2>Numbers</h2>
+
+      <Persons
+        persons={persons}
+        query={filterQuery}
+        handleRemovePerson={handleRemovePerson}
+      />
     </div>
   )
 }

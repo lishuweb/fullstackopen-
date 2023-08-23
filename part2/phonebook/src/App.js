@@ -11,7 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filterQuery, setFilterQuery] = useState('');
   const [status, setStatus] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons))
@@ -19,46 +19,46 @@ const App = () => {
 
   const handleChange = setValue => e => setValue(e.target.value);
 
-  const handleAddNewPerson = e => {
+  const handleNewPerson = e => {
     e.preventDefault();
 
     const newPerson = { name: newName, number: newNumber };
-    const foundPerson = persons.find(person => person.name === newName);
+    const dataReturned = persons.find(person => person.name === newName);
 
-    if (foundPerson) {
-      if (
-        window.confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        )
-      ) {
+    if (dataReturned) 
+    {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) 
+      {
         personService
-          .update(foundPerson.id, newPerson)
+          .update(dataReturned.id, newPerson)
           .then(returnedPerson => {
             setPersons(
               persons.map(person =>
-                person.id !== foundPerson.id ? person : returnedPerson
+                person.id !== dataReturned.id ? person : returnedPerson
               )
             )
           })
           .catch(error => {
             setStatus('error');
-            setMessage(`Information of ${foundPerson.name} has already been removed from server`);
+            setNotification(`Information of ${dataReturned.name} has already been removed from server`);
             setTimeout(() => {
               setStatus(null);
-              setMessage(null);
+              setNotification(null);
             }, 5000);
 
-            setPersons(persons.filter(person => person.id !== foundPerson.id))
+            setPersons(persons.filter(person => person.id !== dataReturned.id))
           })
       }
-    } else {
+    } 
+    else 
+    {
       personService.create(newPerson).then(addedPerson => {
         setPersons(persons.concat(addedPerson));
         setStatus('success');
-        setMessage(`Added ${addedPerson.name}`);
+        setNotification(`Added ${addedPerson.name}`);
         setTimeout(() => {
           setStatus(null);
-          setMessage(null);
+          setNotification(null);
         }, 5000);
 
         setNewName('');
@@ -67,7 +67,7 @@ const App = () => {
     }
   }
 
-  const handleRemovePerson = (id, name) => () => {
+  const handleRemoveChange = (id, name) => () => {
     if (window.confirm(`Delete ${name}?`)) 
     {
       personService.remove(id).then(() => {
@@ -81,7 +81,7 @@ const App = () => {
       <h1>Phonebook</h1>
 
       <Notification 
-        message={message} 
+        notification={notification} 
         status={status} 
       />
 
@@ -97,7 +97,7 @@ const App = () => {
         number={newNumber}
         handleChangeName={handleChange(setNewName)}
         handleChangeNumber={handleChange(setNewNumber)}
-        handleAddPerson={handleAddNewPerson}
+        handleNewPerson={handleNewPerson}
       />
 
       <h2>Numbers</h2>
@@ -105,7 +105,7 @@ const App = () => {
       <Persons
         persons={persons}
         query={filterQuery}
-        handleRemovePerson={handleRemovePerson}
+        handleRemoveChange={handleRemoveChange}
       />
     </div>
   )

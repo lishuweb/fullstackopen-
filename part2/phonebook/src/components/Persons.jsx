@@ -1,6 +1,6 @@
 import Person from './Person';
 
-const Persons = ({ persons, query, handleRemovePerson }) => (
+const Persons = ({ persons, query, handleRemoveChange }) => (
   <div>
     {persons
       .filter(person => person.name.toLowerCase().includes(query))
@@ -9,7 +9,7 @@ const Persons = ({ persons, query, handleRemovePerson }) => (
           key={id}
           name={name}
           number={number}
-          handleRemovePerson={handleRemovePerson(id, name)}
+          handleRemoveChange={handleRemoveChange(id, name)}
         />
       ))}
   </div>

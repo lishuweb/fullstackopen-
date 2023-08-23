@@ -1,6 +1,6 @@
-const Person = ({ name, number, handleRemovePerson }) => (
+const Person = ({ name, number, handleRemoveChange }) => (
     <div key={name}>
-      {name} {number} <button onClick={handleRemovePerson}>delete</button>
+      {name} {number} <button onClick={handleRemoveChange}>delete</button>
     </div>
   )
   

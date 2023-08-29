@@ -5,6 +5,15 @@ const app = express();
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+app.use(express.json());
+app.use(cors());
+app.use(express.static('build'));
+
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
+
 const url = process.env.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
@@ -16,28 +25,6 @@ const personSchema = new mongoose.Schema({
 });
 
 const Person = mongoose.model('Person', personSchema);
-
-app.use(express.json());
-app.use(cors());
-app.use(express.static('build'));
-
-morgan.token('body', (request, response) => {
-    request.method === 'POST' ? JSON.stringify(request.body) : ''
-});
-
-app.use(
-    morgan((tokens, request, response) =>
-    [
-        tokens.method(request, response),
-        tokens.url(request, response),
-        tokens.status(request, response),
-        tokens.res(request, response, 'content-length'), 
-        '-',
-        tokens['response-time'](request, response), 
-        'ms', 
-        tokens.body(request, response),
-    ].join(' ')
-));
 
 const generateId = () => Math.floor((Math.random() * 1000000) + 1);
 
@@ -139,7 +126,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).send(
                 `${request.params.id} is deleted`
             )

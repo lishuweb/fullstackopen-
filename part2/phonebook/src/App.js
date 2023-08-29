@@ -14,7 +14,8 @@ const App = () => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    personService.getAll().then(initialPersons => setPersons(initialPersons))
+    personService.getAll()
+      .then(initialPersons => setPersons(initialPersons))
   }, []);
 
   const handleChange = setValue => e => setValue(e.target.value);
@@ -22,8 +23,15 @@ const App = () => {
   const handleNewPerson = e => {
     e.preventDefault();
 
-    const newPerson = { name: newName, number: newNumber };
-    const dataReturned = persons.find(person => person.name === newName);
+    const newPerson = 
+      { 
+        name: newName, 
+        number: newNumber 
+      };
+
+    const dataReturned = persons.find(
+      person => person.name === newName
+    );
 
     if (dataReturned) 
     {

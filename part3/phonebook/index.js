@@ -2,8 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
-const mongoose = require('mongoose');
 require('dotenv').config();
+const Person = require('./models/phonebook')
 
 app.use(express.json());
 app.use(cors());
@@ -14,19 +14,7 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
-const url = process.env.MONGODB_URI;
-
-mongoose.set('strictQuery', false);
-mongoose.connect(url);
-
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: Number,
-});
-
-const Person = mongoose.model('Person', personSchema);
-
-const generateId = () => Math.floor((Math.random() * 1000000) + 1);
+// const generateId = () => Math.floor((Math.random() * 1000000) + 1);
 
 app.get('/api/persons', (request, response, next) => {
     Person.find({}).then((result) => {
@@ -40,14 +28,14 @@ app.get('/api/persons', (request, response, next) => {
 app.get('/info', (request, response, next) => {
     const len = Person.length;
     response.send(
-            `
-                <p>Phonebook has info for ${len} people</p>
-                <p>${new Date()}</p>
-            `
-        )
-        .catch((e) => {
-            next(e);
-        });
+        `
+            <p>Phonebook has info for ${len} people</p>
+            <p>${new Date()}</p>
+        `
+    )
+    .catch((e) => {
+        next(e);
+    });
 });
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -70,46 +58,42 @@ app.get('/api/persons/:id', (request, response, next) => {
 });
 
 app.post('/api/persons', (request, response, next) => {
-    const id = generateId();
+    // const id = generateId();
 
-    const data = request.body.name;
-    console.log(name, 'hello');
-    Person.find({ name: data.name }).then((result) => {
-        if(result)
+    const data = request.body;
+    if(!data)
+    {
+        response.json(
         {
-            response.json({
-                error: 'name must be unique',
-            }).status(400);
+            error: 'name or number is missing',
         }
-        else 
+        ).status(400)
+    }
+    const personData = Person.find((per) => { per.name === data.name })
+    if(personData)
+    {
+        response.json(
         {
-            if(!data.name && !data.number)
-            {
-                return response.json({
-                    error: 'name or number is missing',
-                }).status(400)
-            }
-            else 
-            {
-                const newData = {
-                    id, 
-                    name: data.name, 
-                    number: data.number
-                };
-                const newPerson = new Person(newData);
-                newPerson.save().then((val) => {
-                    response.json(val).status(201);
-                })
-                .catch((e) => {
-                    next(e);
-                });
-            }
+            error: 'name must be unique',
         }
+        ).status(400);
+    }
+    const newData = {
+        name: data.name, 
+        number: data.number
+    };
+    const newPerson = new Person(newData);
+    newPerson.save().then((val) => {
+        response.json(val).status(201);
     })
+    .catch((e) => {
+        next(e);
+    });
 });
-
+        
 app.put('/api/persons/:id', (request, response, next) => {
-    const id = request.params.id;
+    console.log(request,"requset")
+    const id = Number(request.params.id);
     const data = request.body;
 
     Person.findByIdAndUpdate(id, data, {
@@ -124,9 +108,11 @@ app.put('/api/persons/:id', (request, response, next) => {
         });
 });
 
-app.delete('api/persons/:id', (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id)
-        .then(() => {
+app.delete('/api/persons/:id', (request, response, next) => {
+    console.log(request,"reques")
+    const personId =(request.params.id);
+    console.log(personId,"personid")
+    Person.findByIdAndRemove(personId).then((result) => {
             response.status(204).send(
                 `${request.params.id} is deleted`
             )
@@ -149,7 +135,7 @@ const errorHandler = (error, request, response, next) => {
         return response.status(400)
             .send({
                 error: 'malformatted id'
-                })
+            })
     }
     else if(error.name === 'ValidationError')
     {

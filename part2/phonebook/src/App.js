@@ -82,9 +82,15 @@ const App = () => {
   const handleRemoveChange = (id, name) => () => {
     if (window.confirm(`Delete ${name}?`)) 
     {
-      personService.remove(id).then(() => {
+      personService.remove(id).then((result) => {
         setPersons(persons.filter(person => person.name !== name))
-      })
+      // });
+      setNotification(`Deleted ${name}`);
+      setTimeout(() => {
+        setStatus(null);
+        setNotification(null);
+      }, 5000);
+    })
     }
   }
 

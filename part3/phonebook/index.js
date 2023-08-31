@@ -14,8 +14,6 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
-// const generateId = () => Math.floor((Math.random() * 1000000) + 1);
-
 app.get('/api/persons', (request, response, next) => {
     Person.find({}).then((result) => {
         response.json(result);
@@ -58,8 +56,6 @@ app.get('/api/persons/:id', (request, response, next) => {
 });
 
 app.post('/api/persons', (request, response, next) => {
-    // const id = generateId();
-
     const data = request.body;
     if(!data)
     {
@@ -68,15 +64,6 @@ app.post('/api/persons', (request, response, next) => {
             error: 'name or number is missing',
         }
         ).status(400)
-    }
-    const personData = Person.find((per) => { per.name === data.name })
-    if(personData)
-    {
-        response.json(
-        {
-            error: 'name must be unique',
-        }
-        ).status(400);
     }
     const newData = {
         name: data.name, 
@@ -109,17 +96,16 @@ app.put('/api/persons/:id', (request, response, next) => {
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    console.log(request,"reques")
     const personId =(request.params.id);
     console.log(personId,"personid")
     Person.findByIdAndRemove(personId).then((result) => {
-            response.status(204).send(
-                `${request.params.id} is deleted`
-            )
-        })
-        .catch((error) => {
-            next(error);
-        });
+        response.status(204).send(
+            `${request.params.id} is deleted`
+        )
+    })
+    .catch((error) => {
+        next(error);
+    });
 });
 
 app.use((request, response, next) => {

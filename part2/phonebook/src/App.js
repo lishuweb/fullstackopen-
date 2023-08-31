@@ -84,12 +84,15 @@ const App = () => {
     {
       personService.remove(id).then((result) => {
         setPersons(persons.filter(person => person.name !== name))
-      // });
-      setNotification(`Deleted ${name}`);
-      setTimeout(() => {
-        setStatus(null);
-        setNotification(null);
-      }, 5000);
+        setStatus('error');
+        setNotification(`Deleted ${name}`);
+        setTimeout(() => {
+          setStatus(null);
+          setNotification(null);
+        }, 5000);
+    })
+    .catch(e =>{
+      console.log(e.response.data);
     })
     }
   }

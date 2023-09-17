@@ -65,17 +65,32 @@ app.post('/api/persons', (request, response, next) => {
         }
         ).status(400)
     }
-    const newData = {
-        name: data.name, 
-        number: data.number
-    };
-    const newPerson = new Person(newData);
-    newPerson.save().then((val) => {
-        response.json(val).status(201);
-    })
-    .catch((e) => {
-        next(e);
-    });
+    const personData = Person.findOne({ name: data.name})
+                        .then((result) => {
+                           return response;
+                        });
+    if(personData)
+    {
+        response.json(
+            {
+                error: 'name must be unique'
+            }
+        ).status(400)
+    }
+    else 
+    {
+        const newData = {
+            name: data.name, 
+            number: data.number
+        };
+        const newPerson = new Person(newData);
+        newPerson.save().then((val) => {
+            response.json(val).status(201);
+        })
+        .catch((e) => {
+            next(e);
+        });
+    } 
 });
         
 app.put('/api/persons/:id', (request, response, next) => {

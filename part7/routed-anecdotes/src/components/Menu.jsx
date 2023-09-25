@@ -5,7 +5,7 @@ import About from './About';
 import AnecdoteLists from "./AnecdoteLists";
 // import { useState } from "react";
 
-const Menu = ({ data }) => {
+const Menu = ({ data, setAnecdotes }) => {
 
   const padding = {
     paddingRight: 5
@@ -25,7 +25,7 @@ const Menu = ({ data }) => {
       <Routes>
         <Route path = "/" element = { <AnecdoteList data = {data} /> } />
         {/* <Route path = "/anecdote/:id" element = { <AnecdoteLists data = {anecdote} /> } />s */}
-        <Route path = "/create" element = { <Create /> } />
+        <Route path = "/create" element = { <Create setAnecdotes = {setAnecdotes} /> } />
         <Route path = "/about" element = { <About /> } />
       </Routes>
     </BrowserRouter>

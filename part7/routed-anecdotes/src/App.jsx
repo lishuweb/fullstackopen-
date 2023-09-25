@@ -25,7 +25,9 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu data = {anecdotes} />
+      <Menu data = {anecdotes} 
+            setAnecdotes = {setAnecdotes} 
+      />
       <Footer />
     </div>
   );

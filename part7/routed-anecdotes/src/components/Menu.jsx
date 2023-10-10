@@ -24,7 +24,8 @@ const Menu = ({ data, setAnecdotes }) => {
 
       <Routes>
         <Route path = "/" element = { <AnecdoteList data = {data} /> } />
-        {/* <Route path = "/anecdote/:id" element = { <AnecdoteLists data = {anecdote} /> } />s */}
+        
+        <Route path = "/anecdote/:id" element = { <AnecdoteLists data = {data} /> } />
         <Route path = "/create" element = { <Create setAnecdotes = {setAnecdotes} /> } />
         <Route path = "/about" element = { <About /> } />
       </Routes>

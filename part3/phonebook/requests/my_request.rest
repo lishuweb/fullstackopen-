@@ -11,3 +11,6 @@ content-type: application/json
     "name": "lizan", 
     "number": "90-9090"
 }
+
+###
+GET http://localhost:3001/persons

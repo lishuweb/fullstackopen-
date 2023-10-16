@@ -1,12 +1,20 @@
-const Note = ({ note }) => {
-    return (
-      <>
-        <h2>This is single note for {note.id}</h2>
+import { Link } from "react-router-dom";
+
+const AnecdoteList = ({ anecdote }) => {
+  console.log(anecdote, "note");
+  return( 
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdote.map((val) => (
+    
+          <li key={val.id}>
+            <Link to = {`/anecdote/${val.id}`}>{val.content}</Link>
+          </li> 
+        ))}
+      </ul>
+    </div>
+  )
+};
   
-        <li>
-          {note.content} <strong>{note.important ? "important" : ""}</strong>
-        </li>
-      </>
-    );
-  };
-  export default Note;
+export default AnecdoteList;

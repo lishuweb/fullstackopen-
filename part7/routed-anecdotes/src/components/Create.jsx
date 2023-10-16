@@ -1,18 +1,36 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Notification from "./Notification";
 
-const Create = ({setAnecdotes}) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+const Create = ({ anecdotes, setAnecdotes, notification, setNotification }) => {
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setAnecdotes(
-      content
+  const [content, setContent] = useState();
+  console.log(content, "contentssssssss");
+  const [author, setAuthor] = useState();
+  console.log(author, "author");
+  const [info, setInfo] = useState();
+  console.log(info, "info");
+  
+  const handleSubmit = (event) => {
     
-    )
+    event.preventDefault();
+    const newValue = {
+      id : anecdotes.length + 1,
+      content,
+      author,
+      info,
+      votes : 0,
+      
+    };
+    setAnecdotes(anecdotes.concat(newValue));
+    navigate("/");
+    if(newValue)
+    {
+      setNotification("hello");
+    }
+    console.log(notification, "notification");
   }
-  console.log(content, "content");
 
   return (
     <div>
@@ -20,16 +38,31 @@ const Create = ({setAnecdotes}) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input 
+            label = "content"
+            name='content' 
+            value = {content}
+            onChange={(e) => setContent(e.target.value)}
+          />
         </div>
-        {/* <div>
+        <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input 
+            label = "author"
+            name='author' 
+            value = {author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div> */}
+          <input 
+            label = "info"
+            name='info'
+            value = {info} 
+            onChange={(e) => setInfo(e.target.value)}
+          />
+        </div>
         <button>create</button>
       </form>
     </div>

@@ -9,7 +9,7 @@ import AnecdoteLists from './components/AnecdoteLists';
 import Notification from './components/Notification';
 
 
-const App = () => {
+const App = ({newValue}) => {
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -27,7 +27,33 @@ const App = () => {
     }
   ]);
 
-  const [notification, setNotification] = useState("");
+  const [content, setContent] = useState();
+  console.log(content, "contentssssssss");
+  const [author, setAuthor] = useState();
+  console.log(author, "author");
+  const [info, setInfo] = useState();
+  console.log(info, "info");
+
+  const handleSubmit = (event) => {
+    
+    event.preventDefault();
+    const newValue = {
+      id : anecdotes.length + 1,
+      content,
+      author,
+      info,
+      votes : 0
+    };
+    setAnecdotes(anecdotes.concat(newValue));
+    navigate("/");
+  }
+
+  const[notification, setNotification] = useState("");
+
+  if(newValue)
+  {
+    setNotification("hello");
+  }
 
   const match = useMatch("/anecdote/:id");
   const anecdoteSingle = match ? anecdotes.find((result) => result.id == Number(match.params.id)) : null;
@@ -36,15 +62,23 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
-      <Notification notification = {notification} setNotification = {setNotification}/>
+      
       <Routes>
         <Route path = "/anecdote/:id" element = { <AnecdoteLists anecdoteSingle = {anecdoteSingle} /> } />
         <Route path = "/create" element = { <Create setAnecdotes = {setAnecdotes}
-                                                    anecdotes = {anecdotes} /> } />
+                                                    anecdotes = {anecdotes}  
+                                                    content = {content}
+                                                    author = {author}
+                                                    info = {info}
+                                                    setContent = {setContent}
+                                                    setAuthor = {setAuthor}
+                                                    setInfo = {setInfo}
+                                                    handleSubmit = {handleSubmit}
+        /> } />
         <Route path = "/about" element = { <About /> } />
         <Route path = "/" element = { <AnecdoteList anecdote = {anecdotes} /> } />
       </Routes>
-      
+      <Notification notification = {notification}/>
       <Footer />
     </div>
   );

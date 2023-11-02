@@ -1,36 +1,13 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Notification from "./Notification";
 
-const Create = ({ anecdotes, setAnecdotes, notification, setNotification }) => {
+const Create = (
+    {  content, author, info, setContent, setAuthor, setInfo, handleSubmit }) => {
   const navigate = useNavigate();
 
-  const [content, setContent] = useState();
-  console.log(content, "contentssssssss");
-  const [author, setAuthor] = useState();
-  console.log(author, "author");
-  const [info, setInfo] = useState();
-  console.log(info, "info");
   
-  const handleSubmit = (event) => {
-    
-    event.preventDefault();
-    const newValue = {
-      id : anecdotes.length + 1,
-      content,
-      author,
-      info,
-      votes : 0,
-      
-    };
-    setAnecdotes(anecdotes.concat(newValue));
-    navigate("/");
-    if(newValue)
-    {
-      setNotification("hello");
-    }
-    console.log(notification, "notification");
-  }
+  
+  
 
   return (
     <div>

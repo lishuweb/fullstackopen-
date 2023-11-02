@@ -1,6 +1,7 @@
 // import { useState } from "react";
 
 const Notification = ({ notification }) => {
+    console.log(notification, "notificationnnnnnnnnnn")
     // const [notification, setNotification] = useState('');
 
     return notification ? 

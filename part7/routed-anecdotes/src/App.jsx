@@ -46,6 +46,7 @@ const App = () => {
     authorField.reset();
     infoField.reset();
   };
+
   
   
 
@@ -56,7 +57,8 @@ const App = () => {
       <Notification notification = {notification} />
       <Routes>
         <Route path = "/anecdote/:id" element = { <AnecdoteLists anecdoteList = {anecdotes}
-                                                                 setAnecdotes = { setAnecdotes } /> } />
+                                                                 setAnecdotes = { setAnecdotes }
+                                                                 /> } />
         <Route path = "/create" element = { <Create newValue = { newValue }
                                                     anecdotes = { anecdotes }
                                             /> } 

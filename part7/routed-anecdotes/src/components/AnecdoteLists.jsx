@@ -6,17 +6,25 @@ const AnecdoteLists = ({ anecdoteList, setAnecdotes }) => {
     const match = useMatch("/anecdote/:id");
     const anecdoteSingle = match ? anecdoteList.find((result) => result.id == Number(match.params.id)) : null;
 
-    const id = anecdoteSingle.id;
+    console.log(anecdoteSingle, "lishu");
 
-    const handleVote = () => {
-        const voted = {
-            ...anecdoteSingle,
-            votes: anecdoteSingle.votes + 1,
+    // const voteId = Number(anecdoteSingle.id);
+    // console.log(voteId, "IDDDDD");
+
+    const handleVote = (event) => {
+        event.preventDefault();
+        const newVote = {
+        ...anecdoteList,
+        votes : anecdoteSingle.votes + 1,
         };
-        setAnecdotes(anecdoteList.map((val) => {
-            val.id === id ? voted : val
-        }))
+        console.log(newVote, "newVotessssssssssss");
+        const votedValue = anecdoteList.map((data) => data.id === newVote.id ? newVote : data);
+
+        setAnecdotes(votedValue);
     };
+  
+
+    
 
     return (
         <div>

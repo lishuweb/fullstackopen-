@@ -1,84 +1,69 @@
 import { useState } from 'react';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import { Routes, Route, useMatch } from "react-router-dom";
+import { Routes, Route, useNavigate, useMatch } from "react-router-dom";
 import AnecdoteList from "./components/AnecdoteList";
 import Create from "./components/Create";
 import About from './components/About';
 import AnecdoteLists from './components/AnecdoteLists';
 import Notification from './components/Notification';
+import { useField } from "./hooks/index";
 
 
-const App = ({newValue}) => {
+const App = () => {
   const [anecdotes, setAnecdotes] = useState([
-    {
-      content: 'If it hurts, do it more often',
-      author: 'Jez Humble',
-      info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-      votes: 0,
-      id: 1
-    },
-    {
-      content: 'Premature optimization is the root of all evil',
-      author: 'Donald Knuth',
-      info: 'http://wiki.c2.com/?PrematureOptimization',
-      votes: 0,
-      id: 2
-    }
+  {
+    content: 'If it hurts, do it more often',
+    author: 'Jez Humble',
+    info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+    votes: 0,
+    id: 1
+  },
+  {
+    content: 'Premature optimization is the root of all evil',
+    author: 'Donald Knuth',
+    info: 'http://wiki.c2.com/?PrematureOptimization',
+    votes: 0,
+    id: 2
+  }
   ]);
 
-  const [content, setContent] = useState();
-  console.log(content, "contentssssssss");
-  const [author, setAuthor] = useState();
-  console.log(author, "author");
-  const [info, setInfo] = useState();
-  console.log(info, "info");
+  const navigate = useNavigate();
+  const [notification, setNotification] = useState("");
+  const contentField = useField("text");
+  const authorField = useField("text");
+  const infoField = useField("text");
 
-  const handleSubmit = (event) => {
-    
-    event.preventDefault();
-    const newValue = {
-      id : anecdotes.length + 1,
-      content,
-      author,
-      info,
-      votes : 0
-    };
-    setAnecdotes(anecdotes.concat(newValue));
+  const newValue = (data) => {
+    setAnecdotes(anecdotes.concat(data));
     navigate("/");
-  }
+    setNotification(`a new anecdote ${data.content} created!`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
 
-  const[notification, setNotification] = useState("");
-
-  if(newValue)
-  {
-    setNotification("hello");
-  }
-
-  const match = useMatch("/anecdote/:id");
-  const anecdoteSingle = match ? anecdotes.find((result) => result.id == Number(match.params.id)) : null;
+    contentField.reset();
+    authorField.reset();
+    infoField.reset();
+  };
   
+  
+
   return (
-    <div>
+    <div className='container'>
       <h1>Software anecdotes</h1>
       <Menu />
-      
+      <Notification notification = {notification} />
       <Routes>
-        <Route path = "/anecdote/:id" element = { <AnecdoteLists anecdoteSingle = {anecdoteSingle} /> } />
-        <Route path = "/create" element = { <Create setAnecdotes = {setAnecdotes}
-                                                    anecdotes = {anecdotes}  
-                                                    content = {content}
-                                                    author = {author}
-                                                    info = {info}
-                                                    setContent = {setContent}
-                                                    setAuthor = {setAuthor}
-                                                    setInfo = {setInfo}
-                                                    handleSubmit = {handleSubmit}
-        /> } />
+        <Route path = "/anecdote/:id" element = { <AnecdoteLists anecdoteList = {anecdotes}
+                                                                 setAnecdotes = { setAnecdotes } /> } />
+        <Route path = "/create" element = { <Create newValue = { newValue }
+                                                    anecdotes = { anecdotes }
+                                            /> } 
+        />
         <Route path = "/about" element = { <About /> } />
         <Route path = "/" element = { <AnecdoteList anecdote = {anecdotes} /> } />
       </Routes>
-      <Notification notification = {notification}/>
       <Footer />
     </div>
   );

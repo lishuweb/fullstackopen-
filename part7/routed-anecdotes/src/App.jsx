@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import { Routes, Route, useNavigate, useMatch } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import AnecdoteList from "./components/AnecdoteList";
 import Create from "./components/Create";
 import About from './components/About';
 import AnecdoteLists from './components/AnecdoteLists';
 import Notification from './components/Notification';
-import { useField } from "./hooks/index";
-
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -30,10 +28,7 @@ const App = () => {
 
   const navigate = useNavigate();
   const [notification, setNotification] = useState("");
-  const contentField = useField("text");
-  const authorField = useField("text");
-  const infoField = useField("text");
-
+  
   const newValue = (data) => {
     setAnecdotes(anecdotes.concat(data));
     navigate("/");
@@ -41,14 +36,7 @@ const App = () => {
     setTimeout(() => {
       setNotification(null);
     }, 3000);
-
-    contentField.reset();
-    authorField.reset();
-    infoField.reset();
   };
-
-  
-  
 
   return (
     <div className='container'>

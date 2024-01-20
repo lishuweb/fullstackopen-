@@ -4,4 +4,4 @@ const Person = ({ name, number, handleRemoveChange }) => (
     </div>
   )
   
-  export default Person;
+export default Person;

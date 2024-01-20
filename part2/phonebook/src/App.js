@@ -13,25 +13,26 @@ const App = () => {
   const [status, setStatus] = useState(null);
   const [notification, setNotification] = useState(null);
 
+  console.log(persons, 'personsAPp')
+
   useEffect(() => {
     personService.getAll()
       .then(initialPersons => setPersons(initialPersons))
   }, []);
 
+  const handleChangeName = (e) => setNewName(e.target.value);
+  const handleChangeNumber = (e) => setNewNumber(e.target.value);
+
   const handleChange = setValue => e => setValue(e.target.value);
 
-  const handleNewPerson = e => {
+  const handleNewPerson = (e) => {
     e.preventDefault();
-
-    const newPerson = 
-      { 
+    const newPerson = { 
         name: newName, 
-        number: newNumber 
+        number: newNumber ,
       };
 
-    const dataReturned = persons.find(
-      person => person.name === newName
-    );
+    const dataReturned = persons.find((person) => person.name === newName);
 
     if (dataReturned) 
     {
@@ -114,10 +115,12 @@ const App = () => {
       <h2>add a new</h2>
 
       <PersonForm
-        name={newName}
-        number={newNumber}
-        handleChangeName={handleChange(setNewName)}
-        handleChangeNumber={handleChange(setNewNumber)}
+        newName={newName}
+        newNumber={newNumber}
+        // handleChangeName={handleChange(setNewName)}
+        // handleChangeNumber={handleChange(setNewNumber)}
+        handleChangeName={handleChangeName}
+        handleChangeNumber={handleChangeNumber}
         handleNewPerson={handleNewPerson}
       />
 
